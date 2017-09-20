@@ -14,12 +14,13 @@ import com.jcraft.jsch.Session;
 
 public abstract class ConnectionManager {
 
+	public static String SSH_HOSTNAME = "35.182.225.246";
+	public static String SSH_USERNAME = "ubuntu";
+	public static int SSH_LOCALPORT = 8890;
+	public static int SSH_REMOTEPORT = 3306;
+	public static String SSH_PATH_KEY = "C:/Users/portable/AMAZON/A17-420533-KP.pem";
+	
 	private static Session sshSession;
-	private static String sshHostName = "35.182.225.246";
-	private static String sshUserName = "ubuntu";
-	private static int localPort = 8890;
-	private static int remotePort = 3306;
-	private static String pathKey = "C:/Users/portable/AMAZON/A17-420533-KP.pem";
 
 	public static Connection connectJDBC(String url, String user, String password) {
 
@@ -40,12 +41,12 @@ public abstract class ConnectionManager {
 		
 		try {
 			JSch jsch = new JSch();
-			sshSession = jsch.getSession(sshUserName, sshHostName, 22);
-			jsch.addIdentity(pathKey);
+			sshSession = jsch.getSession(SSH_USERNAME, SSH_HOSTNAME, 22);
+			jsch.addIdentity(SSH_PATH_KEY);
 			
 			configureSSH(sshSession);
 			sshSession.connect();
-			sshSession.setPortForwardingL(localPort, "127.0.0.1", remotePort);
+			sshSession.setPortForwardingL(SSH_LOCALPORT, "127.0.0.1", SSH_REMOTEPORT);
 			System.out.println("Session créée");
 		} catch (Exception e) {
 			System.out.println("Problème de création de session: ");

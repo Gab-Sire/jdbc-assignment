@@ -12,12 +12,18 @@ import com.jcraft.jsch.Session;
 public class Service {
 	
 	public static final int MAX_RESULTS = 30;
-	private static String dbName = "coursDB";
-	private static String user = "root";
-	private static String password = "toor";
-	private static String url =  "jdbc:mysql://localhost/" + dbName + "?user=" + user + "&password=" + password + "&useUnicode=true&characterEncoding=UTF-8";
-	private static String[] results;
 	
+	//constantes pour la base de données
+	public static final String DB_NAME = "coursDB";
+    public static final String DB_USER = "root";
+    public static final String DB_HOSTNAME = "localhost";
+    public static final String DB_PASSWD = "toor";
+    public static final String DB_PORT = "8890";
+	public static final String DB_DRV = "com.mysql.jdbc.Driver";
+    public static final String DB_URL = "jdbc:mysql://" + DB_HOSTNAME +":" + DB_PORT + "/" + DB_NAME;
+    
+    private static String[] results;
+    
 	public static String[] executeStatement(Connection connection, String query) {
 
 		int i = 0;
