@@ -11,23 +11,12 @@ import com.jcraft.jsch.Session;
 
 public class Service {
 	
-	public static final int MAX_RESULTS = 30;
-	
-	//constantes pour la base de données
-	public static final String DB_NAME = "coursDB";
-    public static final String DB_USER = "root";
-    public static final String DB_HOSTNAME = "localhost";
-    public static final String DB_PASSWD = "toor";
-    public static final String DB_PORT = "8890";
-	public static final String DB_DRV = "com.mysql.jdbc.Driver";
-    public static final String DB_URL = "jdbc:mysql://" + DB_HOSTNAME +":" + DB_PORT + "/" + DB_NAME;
-    
-    private static String[] results;
+	private static String[] results;
     
 	public static String[] executeStatement(Connection connection, String query) {
 
 		int i = 0;
-		results = new String[MAX_RESULTS];
+		results = new String[Configuration.QUERY_MAX_RESULTS];
 		
 		try {
 			Statement statement = connection.createStatement();
@@ -49,7 +38,7 @@ public class Service {
 	public static String[] displayDepartmentWomenNotLogistics(Connection connection){
 		
 		String query = "use tp01; " +
-						"SELECT per_nom" + 
+						"SELECT per_nom " + 
 						"FROM tp01_personnel_per " + 
 						"WHERE per_sexe = 'F' " + 
 						  "AND per_emploi != 'LOGISTIQUE';";
