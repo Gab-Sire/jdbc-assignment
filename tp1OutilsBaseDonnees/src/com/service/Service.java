@@ -3,7 +3,11 @@ package com.service;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Classe représentant les fonctions de service (requêtes)
@@ -26,10 +30,8 @@ public class Service {
 	public static String[] get_departmentWomenNotLogistics(Connection connection) {
 
 		queryColumnName = "departement";
-		initialiseResultsArray();
-
 		String query = "{CALL get_departmentWomenNotLogistics()}";
-		resultSet = executeQueryStatement(connection, query, null);
+		resultSet = executeQueryStatement(connection, query);
 
 		return getQueryResults(queryColumnName);
 	}
@@ -44,10 +46,8 @@ public class Service {
 	public static Float get_totalSalaryDoctors(Connection connection) {
 
 		queryColumnName = "totalSalaire";
-		initialiseResultsArray();
-
 		String query = "{CALL get_totalSalaryDoctors()}";
-		resultSet = executeQueryStatement(connection, query, null);
+		resultSet = executeQueryStatement(connection, query);
 		String[] resultsToParse = getQueryResults(queryColumnName);
 		
 		return Float.parseFloat(resultsToParse[0]); 
@@ -63,10 +63,8 @@ public class Service {
 	public static String[] get_emailsAsc(Connection connection) {
 
 		queryColumnName = "email";
-		initialiseResultsArray();
-
 		String query = "{CALL get_emailsAsc()}";
-		resultSet = executeQueryStatement(connection, query, null);
+		resultSet = executeQueryStatement(connection, query);
 
 		return getQueryResults(queryColumnName);
 	}
@@ -80,8 +78,7 @@ public class Service {
 	 */
 	public static int delete_SecretaryStaffFrom2005(Connection connection) {
 
-		int nombreLignesAffectes = 0;
-		initialiseResultsArray();
+		int numberAffectedRows = 0;
 
 		String query = "DELETE FROM tp01_personnel_per " +
 						"WHERE per_emploi = 'SECRETARIAT' " + 
@@ -90,11 +87,11 @@ public class Service {
 		
 		try {
 			Statement statement = connection.createStatement();
-			nombreLignesAffectes = statement.executeUpdate(query);
+			numberAffectedRows = statement.executeUpdate(query);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return nombreLignesAffectes;
+		return numberAffectedRows;
 	}
 
 	/**
@@ -105,30 +102,42 @@ public class Service {
 	 * @param maladieID l'identifiant de la maladie 
 	 * @return results le tableau des résultats sous forme String
 	 */
-	public static String[] add_note_to_patient_with_disease(Connection connection, String maladieID) {
+	public static String[] add_note_to_patient_with_disease(Connection connection, String nomMaladie) {
 
 		queryColumnName = "";
-		CallableStatement callableStatement = null;
-		initialiseResultsArray();
+		CallableStatement callableStatement;
+		String[] insertResults = new String[Configuration.QUERY_MAX_RESULTS];
+		String[] totalInsertResults = new String[Configuration.QUERY_MAX_RESULTS];
+		int j = 0;
+		
+		//trouver l'id de la maladie de par son nom
+		
+		String query = "SELECT mal_id as maladieIDs "
+					 + "FROM tp01_maladie_mal "
+					 + "WHERE mal_nom = '" + nomMaladie + "';";
 
-		String query = "{CALL add_note_to_patient_with_disease(?)}";
-		try {
-			callableStatement = connection.prepareCall(query);
-			callableStatement.setString(1, maladieID);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		resultSet = executeQueryStatement(connection, query, callableStatement);
-
-		return getQueryResults(queryColumnName);
-	}
+		resultSet = executeQueryStatement(connection, query);
+		String[] maladieIDs = getQueryResults("maladieIDs");
+		
+		//insérer une note pour chaque id de maladie correspond au nom
+		for(String maladieID: maladieIDs){
+			
+			query = "{CALL add_note_to_patient_with_disease(?, ?)}";
+			
+			try {
+				callableStatement = connection.prepareCall(query);
+				callableStatement.setString(1, "laifheiuh7");
+				callableStatement.setString(2, maladieID);
+				callableStatement.execute();
+				resultSet = callableStatement.getResultSet();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	
-	/**
-	 * Fonction qui permet d'initialiser le tableau des résultats
-	 */
-	private static void initialiseResultsArray() {
-		results = new String[Configuration.QUERY_MAX_RESULTS];
+			insertResults = getQueryResults(queryColumnName);		
+			totalInsertResults = ArrayUtils.addAll(totalInsertResults, insertResults);
+		}
+		return totalInsertResults;
 	}
 	
 	/**
@@ -136,23 +145,16 @@ public class Service {
 	 * 
 	 * @param connection la connexion JDBC à la base de données
 	 * @param query la requête (sous forme de procédure stockée)
-	 * @param callableStatement un statement d'une procédure qui nécessite des paramètres JDBC associés
 	 * @return resultSet le resultat à interpréter
 	 */
-	public static ResultSet executeQueryStatement(Connection connection, String query, CallableStatement callableStatement) {
+	public static ResultSet executeQueryStatement(Connection connection, String query) {
 		
 		resultSet = null;
 
 		try {
+			Statement statement = connection.createStatement();
+			resultSet = statement.executeQuery(query);
 			
-			if(callableStatement != null){
-				resultSet = callableStatement.executeQuery(query);
-			}
-			else{
-				Statement statement = connection.createStatement();
-				resultSet = statement.executeQuery(query);
-			}	
-
 			System.out.println("Requête effectuée avec succès");
 		} catch (Exception e) {
 			System.out.println("Problème avec la requête: ");
@@ -170,14 +172,17 @@ public class Service {
 	public static String[] getQueryResults(String queryColumnName) {
 		
 		int i = 0;
+		initialiseResultsArray();
 		
 		try {
 			while (resultSet.next()) {
 				if(queryColumnName != ""){
 					results[i] = resultSet.getString(queryColumnName);
+					System.out.println(results[i]);
 				}
 				else{
 					results[i] = resultSet.getString(i + 1);
+					System.out.println(results[i]);
 				}
 				i++;
 			}
@@ -185,5 +190,12 @@ public class Service {
 			e.printStackTrace();
 		}
 		return results;
+	}
+	
+	/**
+	 * Fonction qui permet d'initialiser le tableau des résultats
+	 */
+	private static void initialiseResultsArray() {
+		results = new String[Configuration.QUERY_MAX_RESULTS];
 	}
 }

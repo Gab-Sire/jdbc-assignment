@@ -17,7 +17,7 @@ public interface Configuration {
 	public static final String SSH_PATH_KEY = "C:/Users/portable/AMAZON/A17-420533-KP.pem";
 	
 	//constantes pour la base de données
-	/*public static final String DB_NAME = "coursDB";
+	/*public static final String DB_NAME = "tp01";
 	public static final String DB_USER = "root";
 	public static final String DB_HOSTNAME = "localhost";
 	public static final String DB_PASSWD = "toor";
