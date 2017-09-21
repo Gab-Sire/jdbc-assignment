@@ -1,5 +1,11 @@
 package com.service;
 
+/**
+ * Interface représentant les constantes de configuration pour le SSH et la connexion JDBC
+ * 
+ * @author Gabriel Cyr et Marc-Antoine Béchard
+ *
+ */
 public interface Configuration {
 
 	//constantes pour la session de ssh (tunneling)
@@ -18,7 +24,7 @@ public interface Configuration {
 	public static final String DB_DRV = "com.mysql.jdbc.Driver";
 	public static final String DB_URL = "jdbc:mysql://" + DB_HOSTNAME +":" + DB_PORT + "/" + DB_NAME;*/
 	
-	public static final String DB_NAME = "coursdb";
+	public static final String DB_NAME = "tp01";
 	public static final String DB_USER = "root";
 	public static final String DB_HOSTNAME = "localhost";
 	public static final String DB_PASSWD = "lenneth11";

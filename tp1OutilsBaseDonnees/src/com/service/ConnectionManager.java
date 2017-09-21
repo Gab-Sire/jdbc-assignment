@@ -5,6 +5,12 @@ import java.sql.DriverManager;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+/**
+ * Classe représentant le gestionnaire de connexion
+ * 
+ * @author Gabriel Cyr et Marc-Antoine Béchard
+ *
+ */
 public abstract class ConnectionManager {
 	
 	private static Session sshSession;
