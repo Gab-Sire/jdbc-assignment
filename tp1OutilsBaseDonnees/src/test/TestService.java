@@ -24,7 +24,7 @@ public class TestService {
 	Connection connexion;
 	String departement01;
 	String departement02;
-	String totalSalaire;
+	Float totalSalaire;
 	String email01;
 	String email02;
 	String email03;
@@ -42,7 +42,7 @@ public class TestService {
 		departement01 = "ADMINISTRATIVE";
 		departement02 = "MEDICAL";
 		
-		totalSalaire = "120000.00";
+		totalSalaire = 120000.00f;
 		
 		email01 = "b.filion@medi.com";
 		email02 = "bennedict.flanderson@moo.com";
@@ -61,7 +61,7 @@ public class TestService {
 		
 		connexion.rollback();
 		connexion.close();
-		//ConnectionManager.closeSSHSession();
+		ConnectionManager.closeSSHSession();
 		
 		departement01 = null;
 		departement02 = null;
@@ -92,8 +92,7 @@ public class TestService {
 	
 	@Test
 	public void testGetTotalSalaryDoctors(){
-		String[] resultats = Service.get_totalSalaryDoctors(connexion);
-		assertEquals(totalSalaire, resultats[0]);
+		assertEquals(totalSalaire, (Object) Service.get_totalSalaryDoctors(connexion));
 	}
 	
 	/* requête 03 */
@@ -121,6 +120,6 @@ public class TestService {
 	
 	@Test
 	public void testAddNoteToPatientWithDisease(){
-		String[] tableau = Service.get_totalSalaryDoctors(connexion);
+		//String[] tableau = Service.get_totalSalaryDoctors(connexion);
 	}
 }

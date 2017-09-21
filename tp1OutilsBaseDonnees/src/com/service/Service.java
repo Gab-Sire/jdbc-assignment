@@ -41,15 +41,16 @@ public class Service {
 	 * @param connection la connexion JDBC à la base de données
 	 * @return results le tableau des résultats sous forme String
 	 */
-	public static String[] get_totalSalaryDoctors(Connection connection) {
+	public static Float get_totalSalaryDoctors(Connection connection) {
 
 		queryColumnName = "totalSalaire";
 		initialiseResultsArray();
 
 		String query = "{CALL get_totalSalaryDoctors()}";
 		resultSet = executeQueryStatement(connection, query, null);
-
-		return getQueryResults(queryColumnName);
+		String[] resultsToParse = getQueryResults(queryColumnName);
+		
+		return Float.parseFloat(resultsToParse[0]); 
 	}
 	
 	/**

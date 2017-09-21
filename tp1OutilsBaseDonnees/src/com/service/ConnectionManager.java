@@ -17,7 +17,7 @@ public abstract class ConnectionManager {
 
 	public static Connection connectJDBC(String url, String user, String password) {
 
-		//openSSHSession();
+		openSSHSession();
 		Connection connection = null;
 
 		try {
@@ -39,7 +39,7 @@ public abstract class ConnectionManager {
 			
 			configureSSH(sshSession);
 			sshSession.connect();
-			sshSession.setPortForwardingL(Configuration.SSH_LOCALPORT, "127.0.0.1", Configuration.SSH_REMOTEPORT);
+			sshSession.setPortForwardingL(Configuration.SSH_LOCALPORT, Configuration.SSH_LOCALADRESS, Configuration.SSH_REMOTEPORT);
 			System.out.println("Session créée");
 		} catch (Exception e) {
 			System.out.println("Problème de création de session: ");

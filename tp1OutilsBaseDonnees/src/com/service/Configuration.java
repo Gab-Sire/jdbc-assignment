@@ -11,7 +11,8 @@ public interface Configuration {
 	//constantes pour la session de ssh (tunneling)
 	public static final String SSH_HOSTNAME = "35.182.225.246";
 	public static final String SSH_USERNAME = "ubuntu";
-	public static final int SSH_LOCALPORT = 8890;
+	public static final String SSH_LOCALADRESS = "127.0.0.1";
+	public static final int SSH_LOCALPORT = 8891;
 	public static final int SSH_REMOTEPORT = 3306;
 	public static final String SSH_PATH_KEY = "C:/Users/portable/AMAZON/A17-420533-KP.pem";
 	
