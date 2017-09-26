@@ -58,7 +58,7 @@ public class TestService {
 		
 		connexion.rollback();
 		connexion.close();
-		//ConnectionManager.closeSSHSession();
+		ConnectionManager.closeSSHSession();
 		
 		departement01 = null;
 		departement02 = null;
