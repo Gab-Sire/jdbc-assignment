@@ -37,7 +37,7 @@ public class TestService {
 		departement02 = "MEDICAL";
 		departement03 = "LOGISTIQUE";
 		
-		totalSalaire = 120000.00f;
+		totalSalaire = 225000.00f;
 		
 		email01 = "b.filion@medi.com";			
 		email02 = "myves@gmail.com";	
@@ -48,7 +48,7 @@ public class TestService {
 		nombreLignesSupprimees = 1;
 		aucuneLigneSupprimee = 0;
 		
-		maladie01 = "Cancer l'estomac";
+		maladie01 = "Cancer du colon";
 		maladie02 = "Grippe porcine";
 	}
 
