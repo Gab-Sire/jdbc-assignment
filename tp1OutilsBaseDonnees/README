@@ -1,0 +1,2 @@
+Veuillez utiliser votre cle .pem dans la classe Configuration.java du package com.service.
+Exemple: SSH_PATH_KEY = "mon_chemin/ma_cle.pem";
