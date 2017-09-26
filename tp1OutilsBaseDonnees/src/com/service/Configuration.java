@@ -24,14 +24,7 @@ public interface Configuration {
 	public static final String DB_PORT = "8099";
 	//public static final String DB_DRV = "com.mysql.jdbc.Driver";
 	public static final String DB_URL = "jdbc:mysql://" + DB_HOSTNAME +":" + DB_PORT + "/" + DB_NAME;
-	/*
-	public static final String DB_NAME = "tp01";
-	public static final String DB_USER = "root";
-	public static final String DB_HOSTNAME = "localhost";
-	public static final String DB_PASSWD = "lenneth11";
-	public static final String DB_PORT = "3306";
-	public static final String DB_DRV = "com.mysql.jdbc.Driver";
-	public static final String DB_URL = "jdbc:mysql://" + DB_HOSTNAME +":" + DB_PORT + "/" + DB_NAME;
-	*/
-	int QUERY_MAX_RESULTS = 30;
+	
+	public static final int QUERY_MAX_RESULTS = 30;
+	public static final int ARRAY_SIZE = QUERY_MAX_RESULTS;
 }

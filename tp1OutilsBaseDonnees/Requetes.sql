@@ -139,16 +139,3 @@ BEGIN
 END //
 
 
-
-/* $$$$$  */
-
-DROP FUNCTION IF EXISTS get_maladie_name;
-
-DELIMITER //
-CREATE FUNCTION get_maladie_name(id_maladie VARCHAR(36))
-RETURNS VARCHAR(36) DETERMINISTIC
-BEGIN
-     DECLARE nom_maladie VARCHAR(36);
-        SELECT mal_nom into nom_maladie from tp01_maladie_mal WHERE mal_id = id_maladie;
-     RETURN nom_maladie;
-END //

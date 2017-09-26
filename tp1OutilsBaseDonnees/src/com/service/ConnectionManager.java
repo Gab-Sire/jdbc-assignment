@@ -6,7 +6,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 /**
- * Classe représentant le gestionnaire de connexion
+ * Classe représentant le gestionnaire de connexion JDBC
  * 
  * @author Gabriel Cyr et Marc-Antoine Béchard
  *
@@ -17,7 +17,7 @@ public abstract class ConnectionManager {
 
 	public static Connection connectJDBC(String url, String user, String password) {
 
-		//openSSHSession();
+		openSSHSession();
 		Connection connection = null;
 
 		try {

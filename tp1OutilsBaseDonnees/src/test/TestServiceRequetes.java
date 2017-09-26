@@ -19,14 +19,15 @@ import com.service.Service;
  * @author Gabriel Cyr et Marc-Antoine Béchard
  *
  */
-public class TestService {
+public class TestServiceRequetes {
 	
 	Connection connexion;
 	String departement01, departement02, departement03;
-	Float salaire01, totalSalaire01;
+	Float salaire01, salaire02, totalSalaire01;
 	String email01, email02, email03, email04, email05;
-	int nombreLignesSupprimees, aucuneLigneSupprimee;
-	String maladie01, maladie02;
+	Integer nombreLignesSupprimees;
+	String auteurID, maladieID;
+	Integer nombreLignesInserees;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -37,20 +38,21 @@ public class TestService {
 		departement02 = "MEDICAL";
 		departement03 = "LOGISTIQUE";
 		
-		salaire01 = 225000.00f;
-		totalSalaire01 = 430000.00f;
+		salaire01 = 225000.00f;									//salaire de Milenne Breton
+		salaire02 = 10000.00f;									//salaire invalide de la secrétaire Minawa Suzuki
+		totalSalaire01 = 430000.00f;							//total des salaires valides de Saint-Eustache
 
-		email01 = "b.filion@medi.com";			
-		email02 = "myves@gmail.com";	
-		email03 = "vincethegod@gmail.com";
-		email04 = "katy.reich@bones.com";
-		email05 = "bobvance@refrigerator.com";
+		email01 = "b.filion@medi.com";							//valide, F_ilion
+		email02 = "myves@gmail.com";							//valide, G_uillemette
+		email03 = "vincethegod@gmail.com";  					//valide, L_anglois
+		email04 = "katy.reich@bones.com";						//invalide, docteur mais D_eschannel
+		email05 = "bobvance@refrigerator.com";					//invalide, technicien mais V_ance
 		
-		nombreLignesSupprimees = 1;
-		aucuneLigneSupprimee = 0;
+		nombreLignesSupprimees = 1;								//le regretté secrétaire Pepito Rodriguez
 		
-		maladie01 = "Cancer du colon";
-		maladie02 = "Grippe porcine";
+		auteurID = "df8d1cb6-9960-11e7-abc4-cec278b6b50a";		//le docteur George Wallace (pas de restriction sur l'auteur)
+		maladieID = "6bb65c48-98d5-11e7-abc4-cec278b6b50a";		//cancer de l'estomac
+		nombreLignesInserees = 1;								//note pour la patiente Julie Gauthier traitée par l'infirmier Yves Guillemette
 	}
 
 	@After
@@ -73,8 +75,11 @@ public class TestService {
 		email04 = null;
 		email05 = null;
 		
-		nombreLignesSupprimees = 0;
-		aucuneLigneSupprimee = 0;
+		nombreLignesSupprimees = null;
+		
+		auteurID = null;
+		maladieID = null;
+		nombreLignesInserees = null;
 	}
 	
 	/* requête 01 */
@@ -88,11 +93,11 @@ public class TestService {
 	
 	@Test
 	public void testInvalidGetDepartmentWomenNotLogistics(){
-		String[] resultats = Service.get_departmentWomenNotLogistics(connexion);
+		String[] departements = Service.get_departmentWomenNotLogistics(connexion);
 		
 		//vérifie si le département invalide logistique se trouve dans les résultats de la requête
-		for(int i = 0; i < resultats.length; i++){
-			assertFalse(departement03.equals(resultats[i]));
+		for(int i = 0; i < departements.length; i++){
+			assertFalse(departement03.equals(departements[i]));
 		}
 	}
 	
@@ -102,9 +107,17 @@ public class TestService {
 	public void testValidGetTotalSalaryDoctors(){
 		Float[] totalSalaries = Service.get_totalSalaryDoctors(connexion);
 		assertEquals(salaire01, totalSalaries[0]);
-		System.out.println(totalSalaries[0]);
-		//assertEquals(totalSalaire01, totalSalaries[1]);
-		System.out.println(totalSalaries[1]);
+		assertEquals(totalSalaire01, totalSalaries[1]);
+	}
+	
+	@Test
+	public void testInvalidGetTotalSalaryDoctors(){
+		Float[] totalSalaries = Service.get_totalSalaryDoctors(connexion);
+		
+		//vérifie si le salaire invalide 10 000 est présent dans la liste des résultats
+		for(int i = 0; i < totalSalaries.length; i++){
+			assertFalse(salaire02.equals(totalSalaries[i]));
+		}
 	}
 	
 	/* requête 03 */
@@ -112,10 +125,10 @@ public class TestService {
 	@Test
 	public void testValidGetEmailsAsc(){
 		//vérifie que les emails valides sont dans les résultats et en ordre croissant alphabétique (b..., m..., v...)
-		String[] resultats = Service.get_emailsAsc(connexion);
-		assertEquals(email01, resultats[0]);
-		//assertEquals(email02, resultats[1]);
-		assertEquals(email03, resultats[1]);
+		String[] emails = Service.get_emailsAsc(connexion);
+		assertEquals(email01, emails[0]);
+		assertEquals(email02, emails[1]);
+		assertEquals(email03, emails[2]);
 	}
 	
 	@Test
@@ -135,20 +148,15 @@ public class TestService {
 	/* requête 04 */
 	
 	@Test
-	public void testValidDeleteSecretaryStaffFrom2005() throws SQLException {
+	public void testDeleteSecretaryStaffFrom2005() throws SQLException {
 		assertEquals(nombreLignesSupprimees, Service.delete_SecretaryStaffFrom2005(connexion));	
 	}
-	
-	@Test
-	public void testInvalidDeleteSecretaryStaffFrom2005() throws SQLException {
-		//vérifie qu'il supprime au moins une ligne
-		assertNotEquals(aucuneLigneSupprimee, Service.delete_SecretaryStaffFrom2005(connexion));	
-	}
+
 	
 	/* requête 05 */
 	
 	@Test
 	public void testAddNoteToPatientWithDisease(){
-		//int alo = Service.add_note_to_patient_with_disease(connexion,"df8d182e-9960-11e7-abc4-cec278b6b50a", "6bb65c48-98d5-11e7-abc4-cec278b6b50a");
+		assertEquals(nombreLignesInserees, Service.add_note_to_patient_with_disease(connexion, auteurID, maladieID));
 	}
 }
