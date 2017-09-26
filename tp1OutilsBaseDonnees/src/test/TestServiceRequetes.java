@@ -57,7 +57,6 @@ public class TestServiceRequetes {
 
 	@After
 	public void tearDown() throws Exception {
-		
 		connexion.rollback();
 		connexion.close();
 		ConnectionManager.closeSSHSession();
