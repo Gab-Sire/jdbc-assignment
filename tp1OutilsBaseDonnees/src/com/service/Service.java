@@ -114,7 +114,7 @@ public class Service {
 		
 		String query = "SELECT mal_id as maladieIDs "
 					 + "FROM tp01_maladie_mal "
-					 + "WHERE mal_nom = '" + nomMaladie + "';";
+					 + "WHERE UPPER(mal_nom) = '" + nomMaladie.toUpperCase() + "';";
 
 		resultSet = executeQueryStatement(connection, query);
 		String[] maladieIDs = getQueryResults("maladieIDs");

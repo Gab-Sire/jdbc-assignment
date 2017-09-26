@@ -17,7 +17,7 @@ public abstract class ConnectionManager {
 
 	public static Connection connectJDBC(String url, String user, String password) {
 
-		//openSSHSession();
+		openSSHSession();
 		Connection connection = null;
 
 		try {

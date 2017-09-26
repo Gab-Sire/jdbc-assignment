@@ -40,7 +40,7 @@ public class TestService {
 		totalSalaire = 120000.00f;
 		
 		email01 = "b.filion@medi.com";			
-		email02 = "manon@gmail.com";	
+		email02 = "myves@gmail.com";	
 		email03 = "vincethegod@gmail.com";
 		email04 = "katy.reich@bones.com";
 		email05 = "bobvance@refrigerator.com";
@@ -48,7 +48,7 @@ public class TestService {
 		nombreLignesSupprimees = 1;
 		aucuneLigneSupprimee = 0;
 		
-		maladie01 = "Pneumonie";
+		maladie01 = "Cancer l'estomac";
 		maladie02 = "Grippe porcine";
 	}
 
@@ -57,7 +57,7 @@ public class TestService {
 		
 		connexion.rollback();
 		connexion.close();
-		//ConnectionManager.closeSSHSession();
+		ConnectionManager.closeSSHSession();
 		
 		departement01 = null;
 		departement02 = null;
