@@ -20,6 +20,7 @@ public class Service {
 	private static String[] results;
 	private static ResultSet resultSet;
 	private static String queryColumnName; 
+	private static int numberAffectedRows;
 
 	/**
 	 * Fonction qui permet d'afficher le département du personnel de sexe féminin et qui ne sont pas logistique (requête 01)
@@ -43,14 +44,22 @@ public class Service {
 	 * @param connection la connexion JDBC à la base de données
 	 * @return results le tableau des résultats sous forme String
 	 */
-	public static Float get_totalSalaryDoctors(Connection connection) {
-
+	public static Float[] get_totalSalaryDoctors(Connection connection) {
+		
+		Float[] resultsParsed = new Float[20];
 		queryColumnName = "totalSalaire";
 		String query = "{CALL get_totalSalaryDoctors()}";
 		resultSet = executeQueryStatement(connection, query);
 		String[] resultsToParse = getQueryResults(queryColumnName);
 		
-		return Float.parseFloat(resultsToParse[0]); 
+		for(int i = 0; i < resultsToParse.length; i++){
+	
+			if(null != resultsToParse[i]){
+				resultsParsed[i] = Float.parseFloat(resultsToParse[i]);
+			}
+		}
+		
+		return resultsParsed; 
 	}
 	
 	/**
@@ -78,7 +87,7 @@ public class Service {
 	 */
 	public static int delete_SecretaryStaffFrom2005(Connection connection) {
 
-		int numberAffectedRows = 0;
+		numberAffectedRows = 0;
 
 		String query = "DELETE FROM tp01_personnel_per " +
 						"WHERE per_emploi = 'SECRETARIAT' " + 
@@ -102,42 +111,29 @@ public class Service {
 	 * @param maladieID l'identifiant de la maladie 
 	 * @return results le tableau des résultats sous forme String
 	 */
-	public static String[] add_note_to_patient_with_disease(Connection connection, String nomMaladie) {
+	public static int add_note_to_patient_with_disease(Connection connection, String nomAuteur, String maladieID) {
 
-		queryColumnName = "";
+		numberAffectedRows = 0;
+		int i = 0;
+		
+		String query = "{CALL add_note_to_patient_with_disease(?, ?)}";
 		CallableStatement callableStatement;
-		String[] insertResults = new String[Configuration.QUERY_MAX_RESULTS];
-		String[] totalInsertResults = new String[Configuration.QUERY_MAX_RESULTS];
-		int j = 0;
-		
-		//trouver l'id de la maladie de par son nom
-		
-		String query = "SELECT mal_id as maladieIDs "
-					 + "FROM tp01_maladie_mal "
-					 + "WHERE UPPER(mal_nom) = '" + nomMaladie.toUpperCase() + "';";
-
-		resultSet = executeQueryStatement(connection, query);
-		String[] maladieIDs = getQueryResults("maladieIDs");
-		
-		//insérer une note pour chaque id de maladie correspond au nom
-		for(String maladieID: maladieIDs){
 			
-			query = "{CALL add_note_to_patient_with_disease(?, ?)}";
-			
-			try {
-				callableStatement = connection.prepareCall(query);
-				callableStatement.setString(1, "laifheiuh7");
-				callableStatement.setString(2, maladieID);
-				callableStatement.execute();
-				resultSet = callableStatement.getResultSet();
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			callableStatement = connection.prepareCall(query);
+			callableStatement.setString(1, nomAuteur);
+			callableStatement.setString(2, maladieID);
+			callableStatement.execute();
+			resultSet = callableStatement.getResultSet();
+			while(resultSet.next()){
+				numberAffectedRows = resultSet.getInt(i);
+				i++;
 			}
-	
-			insertResults = getQueryResults(queryColumnName);		
-			totalInsertResults = ArrayUtils.addAll(totalInsertResults, insertResults);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return totalInsertResults;
+	
+		return numberAffectedRows;
 	}
 	
 	/**

@@ -23,7 +23,7 @@ public class TestService {
 	
 	Connection connexion;
 	String departement01, departement02, departement03;
-	Float totalSalaire;
+	Float salaire01, totalSalaire01;
 	String email01, email02, email03, email04, email05;
 	int nombreLignesSupprimees, aucuneLigneSupprimee;
 	String maladie01, maladie02;
@@ -37,7 +37,8 @@ public class TestService {
 		departement02 = "MEDICAL";
 		departement03 = "LOGISTIQUE";
 		
-		totalSalaire = 120000.00f;
+		salaire01 = 225000.00f;
+		totalSalaire01 = 430000.00f;
 		
 		email01 = "b.filion@medi.com";			
 		email02 = "myves@gmail.com";	
@@ -57,13 +58,14 @@ public class TestService {
 		
 		connexion.rollback();
 		connexion.close();
-		ConnectionManager.closeSSHSession();
+		//ConnectionManager.closeSSHSession();
 		
 		departement01 = null;
 		departement02 = null;
 		departement03 = null;
 		
-		totalSalaire = null;
+		salaire01 = null;
+		totalSalaire01 = null;
 		
 		email01 = null;		
 		email02 = null;
@@ -98,7 +100,11 @@ public class TestService {
 	
 	@Test
 	public void testValidGetTotalSalaryDoctors(){
-		assertEquals(totalSalaire, (Object) Service.get_totalSalaryDoctors(connexion));
+		Float[] totalSalaries = Service.get_totalSalaryDoctors(connexion);
+		assertEquals(salaire01, totalSalaries[0]);
+		System.out.println(totalSalaries[0]);
+		//assertEquals(totalSalaire01, totalSalaries[1]);
+		System.out.println(totalSalaries[1]);
 	}
 	
 	/* requête 03 */
@@ -108,8 +114,8 @@ public class TestService {
 		//vérifie que les emails valides sont dans les résultats et en ordre croissant alphabétique (b..., m..., v...)
 		String[] resultats = Service.get_emailsAsc(connexion);
 		assertEquals(email01, resultats[0]);
-		assertEquals(email02, resultats[1]);
-		assertEquals(email03, resultats[2]);
+		//assertEquals(email02, resultats[1]);
+		assertEquals(email03, resultats[1]);
 	}
 	
 	@Test
@@ -143,6 +149,6 @@ public class TestService {
 	
 	@Test
 	public void testAddNoteToPatientWithDisease(){
-		String[] tableau = Service.add_note_to_patient_with_disease(connexion, maladie01);
+		//int alo = Service.add_note_to_patient_with_disease(connexion,"df8d182e-9960-11e7-abc4-cec278b6b50a", "6bb65c48-98d5-11e7-abc4-cec278b6b50a");
 	}
 }

@@ -21,7 +21,7 @@ DROP PROCEDURE IF EXISTS get_totalSalaryDoctors;
 DELIMITER $$
 CREATE PROCEDURE get_totalSalaryDoctors()
 BEGIN
-SELECT SUM(per_salaire) as totalSalaire, per_adresse
+SELECT SUM(per_salaire) as totalSalaire, per_adresse as adresse
 FROM tp01_personnel_per
 INNER JOIN tp01_note_not ON not_id_auteur = per_id
 WHERE per_emploi = "DOCTEUR"
